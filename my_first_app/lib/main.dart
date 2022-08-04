@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'question.dart';
-import 'answer.dart';
+import 'quiz.dart';
+import 'result.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,36 +14,38 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionsIndex = 0;
-  final questions = [
+  final _questions = [
     {'question': "Are you fat?", 'answers': ['Yes', 'No']},
-    {'question': "How old are you?", 'answers': ['<15', '15-18', '18-25', '25+']},
+    {'question': "How old are you?", 'answers': ['<15', '15-18', '18+']},
     {'question': "How fast can u rotate?", 'answers': ['less then 400 rpm', 'between 400-550 rmp', 'faster then 550 rmp']},
     ];
+  String result = "";
 
-  void _answerQuestion() {
+  void _answerQuestion(String answer) {
+
+    result += answer;
+
     setState(() {
-      if(++_questionsIndex >= questions.length){
-        _questionsIndex = 0;
-      }
+      _questionsIndex++;
+    });
+  }
+
+  void resetQuiz(){
+    setState(() {
+      _questionsIndex = 0;
+      result = "";
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('What kind of door are you?'),
         ),
         body: Center(
-          child: Column(
-            children: <Widget>[
-              Question(questions[_questionsIndex]['question']),
-              ...(questions[_questionsIndex]['answers'] as List<String>).map((e) => Answer(_answerQuestion, e)).toList()
-            ],
-          ),
+          child: _questionsIndex < _questions.length ? Quiz(_answerQuestion, _questions, _questionsIndex) : Result(result, resetQuiz),
         ),
       ),
     );
