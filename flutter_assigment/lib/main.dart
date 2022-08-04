@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'control_text.dart';
+import 'my_text.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -14,9 +17,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final String title = 'My first app';
 
+  final List<String> texts = ["AAA", "BB"];
+  var textIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {});
+  void _changeText() {
+    setState(() {
+      if(++textIndex >= texts.length){
+        textIndex = 0;
+      }
+    });
   }
 
   @override
@@ -25,6 +34,14 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(title),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              MyText(texts[textIndex]),
+              ControlText(_changeText)
+            ],
+          ),
         ),
       ),
     );
