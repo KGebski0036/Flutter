@@ -6,7 +6,7 @@ class NoTransactionsAdded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 100,
+      height: MediaQuery.of(context).size.height - 135,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

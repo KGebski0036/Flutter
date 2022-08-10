@@ -27,6 +27,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> transacrions = [];
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
     return transacrions
@@ -37,6 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscapeMod =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -51,11 +55,27 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView(
         children: <Widget>[
-          Card(
-            child: Container(
-              child: Chart(_recentTransactions),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Show Chart'),
+              Switch(
+                  value: _showChart,
+                  onChanged: (val) {
+                    setState(() {
+                      _showChart = val;
+                    });
+                  }),
+            ],
+          ),
+          Visibility(
+            visible: _showChart,
+            child: Card(
+              child: Container(
+                child: Chart(_recentTransactions),
+              ),
+              elevation: 5,
             ),
-            elevation: 5,
           ),
           Card(
             child: transacrions.isEmpty
@@ -64,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: isLandscapeMod ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => startAddNewTransaction(context),
@@ -74,8 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
-        context: ctx,
-        builder: ((context) => AddTransactionDialog(_addNewTransaction)));
+      context: ctx,
+      builder: ((context) => AddTransactionDialog(_addNewTransaction)),
+    );
   }
 
   void _addNewTransaction(
