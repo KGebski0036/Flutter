@@ -47,11 +47,22 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product value) {
-    //_items.add(value);
+    _items.add(value);
     notifyListeners();
   }
 
   Product findById(String id) {
     return _items.firstWhere(((element) => id == element.id));
+  }
+
+  void updateProduct(String id, Product newProduct) {
+    var prodIndex = _items.indexWhere((element) => element.id == id);
+    _items[prodIndex] = newProduct;
+    notifyListeners();
+  }
+
+  void deleteProduct(String id) {
+    _items.removeWhere((element) => element.id == id);
+    notifyListeners();
   }
 }
